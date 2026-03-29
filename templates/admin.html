@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8"/> 
+    <title>Page d'administration</title>
+    <meta name="author" content="Ayyoub"/>
+    <meta name="keywords" content="A COMPLETER"/>
+
+    <style>
+        body {
+            background-image: url('../image/logical.png');
+            background-repeat: repeat;
+            background-size: auto;
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+
+        h1 {
+            font-size: 36px;
+            color: #343a40;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        form {
+            margin: 20px 0;
+        }
+
+        button {
+            padding: 12px 24px;
+            font-size: 18px;
+            background-color: #007bff;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .alert {
+            padding: 15px 25px;
+            border-radius: 5px;
+            margin-top: 15px;
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        #loader {
+            display: none;
+            font-size: 18px;
+            color: #333;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Interface d'administration</h1>
+
+
+    <!-- Formulaire pour importer les matrices -->
+    <form action="{{ url_for('importer_matrice') }}" method="post" onsubmit="showLoader()">
+        <button type="submit">Importer les matrices</button>
+    </form>
+
+    <!-- Formulaire pour voir les compétences -->
+    <form action="{{ url_for('rechercher') }}" method="post">
+        <button type="submit">Voir les compétences</button>
+    </form>
+
+    <!-- Formulaire pour écrire le cv -->
+    <form action="{{ url_for('ecrire_cv') }}" method="post">
+        <button type="submit">Exporter les données vers le Chatbot</button>
+    </form>
+
+    <!-- Formulaire pour mapper la bdd cvtech -->
+    <form action="{{ url_for('mapping_cvtech') }}" method="post">
+        <button type="submit">Importer les données dans la BDD CVTech</button>
+    </form>
+
+    <form style="margin: 20px 0;">
+        <button type="button" onclick="window.location.href='https://www.bing.com/aclick?ld=e84aiskmDLxdx35FX0zi30ATVUCUwPx1Wp4sneRjFtGKcWfpEoTITW_tXMFs7lLVdlKPukUO-WuYHEUo4Kzw_qJdRYHWU4qyTHgsQRzyO-RD6UiUVZMMMMNaUUxKPS0GYSuU24dNoxgaAUd9oJL3yjtyvgxi8UzHKFhmeNT-cTL2XzS62E6QCzVrCROeWGOfpmEGPIFw&u=aHR0cHMlM2ElMmYlMmZjbG91ZC5nb29nbGUuY29tJTJmZ2NwJTJmJTNmdXRtX3NvdXJjZSUzZGJpbmclMjZ1dG1fbWVkaXVtJTNkY3BjJTI2dXRtX2NhbXBhaWduJTNkZW1lYS1mci1hbGwtZW4tZHItYmt3cy1hbGwtYWxsLXRyaWFsLWUtZ2NwLTE2MDUxNDAlMjZ1dG1fY29udGVudCUzZHRleHQtYWQtbm9uZS1hbnktREVWX2MtQ1JFXy1BREdQX0h5YnJpZCUyYiUyNTdDJTJiQktXUyUyYi0lMmJQSFIlMmIlMjU3QyUyYlR4dCUyYi0lMmJHQ1AlMmItJTJiR2VuZXJhbCUyYi0lMmJ2MTYtS1dJRF80MzcwMDA3NzM1NjgyNzA4OS1rd2QtNzY4Mjg2OTA1OTA2MTElM2Fsb2MtNjYtdXNlcmxvY18xODU1NjAlMjZ1dG1fdGVybSUzZEtXX2dvb2dsZS5jb20lMjUyMGNsb3VkLU5FVF9vLVBMQUNfJTI2JTI2Z2NsaWQlM2Q2YzNmZjQzZDE4NDcxYzg2Y2IyNTljNzQ2YTY5ZTI2YiUyNmdjbHNyYyUzZDNwLmRzJTI2bXNjbGtpZCUzZDZjM2ZmNDNkMTg0NzFjODZjYjI1OWM3NDZhNjllMjZi&rlid=6c3ff43d18471c86cb259c746a69e26b&ntb=1'">Aller sur GCP</button>
+    </form>
+
+    <!-- Loader -->
+    <div id="loader">
+        <p>⏳ Importation en cours...</p>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        function showLoader() {
+            document.getElementById('loader').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

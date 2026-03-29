@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Résultat de la Recherche</title>
+    <meta name="author" content="Ayyoub"/>
+    <meta name="keywords" content="A COMPLETER"/>
+    <style>
+        /* Reset et base */
+        :root {
+            --primary: #007bff;
+            --primary-hover: #0056b3;
+            --border: #ced4da;
+            --border-focus: #495057;
+            --text: #343a40;
+            --bg-header: #f2f2f2;
+            --shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Typographie */
+        h1, h2, h3 {
+            color: var(--text);
+            margin-bottom: 1rem;
+        }
+
+        .titre-nom h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin: 1.5rem 0;
+        }
+
+        /* Layout */
+        .back-button {
+            margin: 1.5rem 0;
+            align-self: flex-start;
+        }
+
+        .search-forms {
+            width: 100%;
+            max-width: 900px;
+            margin: 1rem auto 2rem;
+        }
+
+        .form-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .intercontrat-checkbox {
+            grid-column: 1 / -1;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Formulaires */
+        select {
+            width: 100%;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background-color: white;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: var(--border-focus);
+            box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+        }
+
+        button {
+            padding: 0.5rem 1rem;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-size: 1rem;
+        }
+
+        button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        /* Résultats */
+        .skills-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            width: 100%;
+            margin-top: 2rem;
+        }
+
+        .skill-block {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border: 1px solid #dee2e6;
+        }
+
+        th {
+            background-color: var(--bg-header);
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+
+            .form-group {
+                grid-template-columns: 1fr;
+            }
+
+            .skills-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="back-button">
+    <form action="{{ url_for('retour') }}" method="post">
+        <button type="submit">Retour sur la page admin</button>
+    </form>
+</div>
+
+<div class="search-forms">
+    <form action="{{ url_for('rechercher') }}" method="post">
+        <div class="form-group">
+           <!-- Case à cocher - Ligne spécifique comme sur l'image -->
+            <label class="intercontrat-checkbox">
+                <input type="checkbox" name="intercontrat" {% if filtre_intercontrat %}checked{% endif %}>
+                Afficher uniquement les personnes en intercontrat
+            </label>
+
+            <!-- Formulaire pour modifier l'intercontrat d'une personne -->
+            <form method="post" action="{{ url_for('maj_intercontrat') }}">
+                <input type="hidden" name="id_personne" value="{{ personne_id }}">
+                <label class="intercontrat-checkbox">
+                    <input type="checkbox" name="intercontrat_personne" value="1" onchange="this.form.submit()" {% if intercontrat %}checked{% endif %}>
+                    Mettre cette personne en intercontrat
+                </label>
+            </form>
+
+            <select class="select-style" id="choix_personne" name="choix_personne">
+                <option value="">-- Sélectionnez une personne --</option>
+                {% for p in personnes %}
+                    <option value="{{ p[0] }}" {% if p[0]|string == choix_personne|string %}selected{% endif %}>{{ p[1] }} {{ p[2] }}</option>
+                {% endfor %}
+            </select>
+
+            <select class="select-style" id="choix_competence" name="choix_competence">
+                <option value="">-- Sélectionnez une compétence --</option>
+                {% for comp in liste_competences %}
+                    <option value="{{ comp[0] }}" {% if comp[0]|string == choix_competence|string %}selected{% endif %}>{{ comp[0] }}</option>
+                {% endfor %}
+            </select>
+
+
+
+            <button type="submit" class="search-button">Rechercher</button>
+        </div>
+    </form>
+</div>
+
+{% if hard_results and hard_results|length > 0 and choix_personne %}
+    <div class="titre-nom">
+        <h1> Compétences de {{ hard_results[0][2] }} {{ hard_results[0][1] }}</h1>
+    </div>
+    <h2> Poste : {{ hard_results[0][3] }} </h2>
+    <!--<h2> Numéro : {{ hard_results[0][0] }} </h2>-->
+    <h2>Intercontrat : {{ 'oui' if hard_results[0][4] == 1 else 'non' }}</h2>
+{% endif %}
+
+<!-- Résultats de la recherche par compétence -->
+{% if hard_results and choix_competence %}
+    <h3>Personnes ayant la compétence sélectionnée :</h3>
+    <table border="1" cellpadding="5" cellspacing="0">
+        <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Poste</th>
+            <th>Niveau</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for person in hard_results %}
+            <tr>
+                <td>{{ person[1] }}</td>
+                <td>{{ person[2] }}</td>
+                <td>{{ person[3] }}</td>
+                <td>{{ person[7] }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+
+{% if intercontrat and hard_results %}
+    <h2>Personnes en Intercontrat</h2>
+    <table border="1" cellpadding="5" cellspacing="0">
+        <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>ID</th>
+            <th>Intercontrat</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for p in hard_results %}
+            <tr>
+                <td>{{ p[1] }}</td>
+                <td>{{ p[2] }}</td>
+                <td>{{ p[0] }}</td>
+                <td>{{ p[3] }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+
+{% if hard_results and not choix_competence and not intercontrat and choix_personne %}
+<div class="main-container">
+    <div class="skills-container">
+        <div class="skill-block">
+            <div>
+                <h2>Hard Skills</h2>
+                <table>
+                    <tr>
+                        <th>Compétence</th>
+                        <th>Catégorie</th>
+                        <th>Niveau</th>
+                    </tr>
+                    {% for skill in hard_results %}
+                        <tr>
+                            <td>{{ skill[5] }}</td>
+                            <td>{{ skill[6] }}</td>
+                            <td>{{ skill[7] }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+
+        <div class="skill-block">
+            <div>
+                <h2>Soft Skills</h2>
+                <table>
+                    <tr>
+                        <th>Compétence</th>
+                        <th>Niveau</th>
+                    </tr>
+                    {% for skill in soft_results %}
+                        <tr>
+                            <td>{{ skill[5] }}</td>
+                            <td>{{ skill[6] }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+</body>
+</html>

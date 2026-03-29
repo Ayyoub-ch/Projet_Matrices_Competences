@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8"/> 
+    <title>Tableaux de Compétences</title>
+    <meta name="author" content="Ayyoub"/>
+    <meta name="keywords" content="A COMPLETER"/>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #343a40;
+        }
+
+        .main-container {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            gap: 40px;
+        }
+
+        .personnes-container {
+            width: 300px;
+        }
+
+        .skills-container {
+            display: flex;
+            flex-direction: row;
+            gap: 40px;
+        }
+
+        .skill-block {
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        table {
+            border-collapse: collapse;
+            background-color: #fff;
+            border: 2px solid #dee2e6;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            color: #343a40;
+        }
+
+        form {
+            margin: 20px auto;
+            max-width: 320px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        select {
+            flex-grow: 1;
+            padding: 8px 12px;
+            font-size: 16px;
+            border: 1.5px solid #ced4da;
+            border-radius: 4px;
+            background-color: white;
+            color: #343a40;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #495057;
+        }
+
+        button {
+            padding: 8px 16px;
+            font-size: 16px;
+            background-color: #007bff;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Tableaux de Compétences</h1>
+
+    <form action="{{ url_for('retour') }}" method="post">
+    <button type="submit">Retour sur la page admin</button>
+    </form>
+
+    <form action="/rechercher" method="POST">
+        <select id="choix" name="choix">
+            <option value="">-- Sélectionnez une personne--</option> <!-- faire en sorte que chaque personne soit comprise dans le menu déroulant-->
+            {% for personne in personnes %}
+                <option value="{{ personne[0] }}">{{ personne[1] }} {{ personne[0] }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Recherche</button>
+    </form>
+
+    {% if hard_results and hard_results|length > 0 and choix == personnes[0][2] %}
+        <h2> Poste : {{ hard_results[0][3] }} </h2>
+        <h2> Numéro : {{ hard_results[0][0] }} </h2>
+    {% endif %}
+
+
+
+    <div class="main-container">
+        <div class="skills-container">
+            <div class="skill-block">
+    <div>
+        <h2>Hard Skills</h2>
+        <table>
+            <tr>
+                <th>Compétence</th>
+                <th>Catégorie</th>
+                <th>Niveau</th>
+            </tr>
+            {% for skill in hard_results %}
+            <tr>
+                <td>{{ skill[4] }}</td>  <!-- competence1 -->
+                <td>{{ skill[5] }}</td>  <!-- categorie -->
+                <td>{{ skill[6] }}</td>  <!-- niveau -->
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+            <div class="skill-block">
+            <div>
+                <h2>Soft Skills</h2>
+                <table>
+                    <tr>
+                        <th>Compétence</th>
+                        <th>Niveau</th>
+                    </tr>
+                    {% for skill in soft_results %}
+                    <tr>
+                        <td>{{ skill[4] }}</td>  <!-- competence2 -->
+                        <td>{{ skill[5] }}</td>  <!-- niveau -->
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+
+        </div>
+    </div>
+
+</body>
+</html>
