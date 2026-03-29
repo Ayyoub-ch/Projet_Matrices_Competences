@@ -167,6 +167,42 @@ def maj_intercontrat():
     return redirect(url_for('index'))  # Redirige vers la page d’administration ou la page souhaitée
 
 
+@app.route('/reinitialiser_bdd', methods=['POST'])
+def reinitialiser_bdd():
+    conn = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="",
+        database="matrice"
+    )
+
+    try:
+        cursor = conn.cursor()
+
+        # Ordre explicite demandé pour réinitialiser les compteurs et vider les tables.
+        cursor.execute("ALTER TABLE personne AUTO_INCREMENT=0;")
+        cursor.execute("ALTER TABLE soft AUTO_INCREMENT=0;")
+        cursor.execute("ALTER TABLE hard AUTO_INCREMENT=0;")
+        cursor.execute("ALTER TABLE niveau_hard AUTO_INCREMENT=0;")
+        cursor.execute("ALTER TABLE niveau_soft AUTO_INCREMENT=0;")
+        cursor.execute("DELETE FROM niveau_soft;")
+        cursor.execute("DELETE FROM soft;")
+        cursor.execute("DELETE FROM niveau_hard;")
+        cursor.execute("DELETE FROM hard;")
+        cursor.execute("DELETE FROM personne;")
+
+        conn.commit()
+    except Exception as e:
+        conn.rollback()
+        app.logger.error(f"Erreur lors de la réinitialisation de la base : {e}")
+        abort(500, description="Erreur lors de la réinitialisation de la base de données.")
+    finally:
+        cursor.close()
+        conn.close()
+
+    return redirect(url_for('index'))
+
+
 
 """
 @app.route('/filtrage', methods=['GET', 'POST'])

@@ -102,6 +102,11 @@
         <button type="submit">Importer les données dans la BDD CVTech</button>
     </form>
 
+    <!-- Formulaire pour réinitialiser la base -->
+    <form action="{{ url_for('reinitialiser_bdd') }}" method="post" onsubmit="return confirmReset()">
+        <button type="submit">Réinitialiser la base de données</button>
+    </form>
+
     <form style="margin: 20px 0;">
         <button type="button" onclick="window.location.href='https://www.bing.com/aclick?ld=e84aiskmDLxdx35FX0zi30ATVUCUwPx1Wp4sneRjFtGKcWfpEoTITW_tXMFs7lLVdlKPukUO-WuYHEUo4Kzw_qJdRYHWU4qyTHgsQRzyO-RD6UiUVZMMMMNaUUxKPS0GYSuU24dNoxgaAUd9oJL3yjtyvgxi8UzHKFhmeNT-cTL2XzS62E6QCzVrCROeWGOfpmEGPIFw&u=aHR0cHMlM2ElMmYlMmZjbG91ZC5nb29nbGUuY29tJTJmZ2NwJTJmJTNmdXRtX3NvdXJjZSUzZGJpbmclMjZ1dG1fbWVkaXVtJTNkY3BjJTI2dXRtX2NhbXBhaWduJTNkZW1lYS1mci1hbGwtZW4tZHItYmt3cy1hbGwtYWxsLXRyaWFsLWUtZ2NwLTE2MDUxNDAlMjZ1dG1fY29udGVudCUzZHRleHQtYWQtbm9uZS1hbnktREVWX2MtQ1JFXy1BREdQX0h5YnJpZCUyYiUyNTdDJTJiQktXUyUyYi0lMmJQSFIlMmIlMjU3QyUyYlR4dCUyYi0lMmJHQ1AlMmItJTJiR2VuZXJhbCUyYi0lMmJ2MTYtS1dJRF80MzcwMDA3NzM1NjgyNzA4OS1rd2QtNzY4Mjg2OTA1OTA2MTElM2Fsb2MtNjYtdXNlcmxvY18xODU1NjAlMjZ1dG1fdGVybSUzZEtXX2dvb2dsZS5jb20lMjUyMGNsb3VkLU5FVF9vLVBMQUNfJTI2JTI2Z2NsaWQlM2Q2YzNmZjQzZDE4NDcxYzg2Y2IyNTljNzQ2YTY5ZTI2YiUyNmdjbHNyYyUzZDNwLmRzJTI2bXNjbGtpZCUzZDZjM2ZmNDNkMTg0NzFjODZjYjI1OWM3NDZhNjllMjZi&rlid=6c3ff43d18471c86cb259c746a69e26b&ntb=1'">Aller sur GCP</button>
     </form>
@@ -115,6 +120,10 @@
     <script>
         function showLoader() {
             document.getElementById('loader').style.display = 'block';
+        }
+
+        function confirmReset() {
+            return confirm('Cette action va supprimer toutes les données. Continuer ?');
         }
     </script>
 </body>

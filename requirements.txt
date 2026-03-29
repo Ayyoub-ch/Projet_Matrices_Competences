@@ -3,4 +3,3 @@ mysql-connector-python
 pandas
 openpyxl
 SQLAlchemy
-gunicorn
